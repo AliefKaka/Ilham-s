@@ -118,13 +118,13 @@
   <canvas id="snow-canvas"></canvas>
   <div class="overlay"></div>
   <header>
-    <img src="https://files.catbox.moe/445zpm.jpg" alt="RaynShiro Logo">
+    <img src="https://files.catbox.moe/445zpm.jpg" alt="Zixun Logo">
     <h1>Welcome To Website Zixun</h1>
   </header>  <div class="button-frame">
-    <button onclick="showPopup('developer')">Story</button>
-    <button onclick="showPopup('miyako')">Filosofi</button>
-    <button onclick="showPopup('sewa')">Tutorial</button>
-    <button onclick="showPopup('premium')">List Moderator</button>
+    <button onclick="showPopup('story')">Story</button>
+    <button onclick="showPopup('filosofi')">Filosofi</button>
+    <button onclick="showPopup('tutorial')">Tutorial</button>
+    <button onclick="showPopup('moderator')">List Moderator</button>
     <button onclick="window.open('https://www.instagram.com/zixunsss?igsh=M2g5NjNuOWR3YmRs', '_blank')">Instagram</button>
     <button onclick="window.open('https://www.tiktok.com/@zixunn11?_r=1&_t=ZS-92vE48vAunM', '_blank')">TikTok</button>
     <button onclick="window.open('https://youtube.com/@zixun11?si=DiuY8htQX3f4RCOz', '_blank')">YouTube</button>
@@ -182,11 +182,11 @@
       const popup = document.getElementById('popup');
       const content = document.getElementById('popup-content');
       let html = '';
-      if (type === 'developer') {
-        html = `<h2>Developer</h2><p style="white-space:pre-wrap">👤 Perkenalan Diri (Developer - RaynShiro)
+      if (type === 'story') {
+        html = `<h2>Developer</h2><p style="white-space:pre-wrap">👤 Perkenalan Diri (Developer - Alief Kaka)
 
-Perkenalkan, saya RaynShiro.
-Anda mungkin mengenal saya dengan beberapa nama panggilan, seperti Dill, Rayn, atau Ellen. Saat ini saya masih berstatus pelajar.
+Perkenalkan, saya Alief Kaka.
+Anda mungkin mengenal saya dengan beberapa nama panggilan, seperti Alief, Kaka. Saat ini saya masih berstatus pelajar.
 Meskipun demikian, saya memiliki minat dan ambisi yang kuat di dua bidang yang berbeda, yaitu pemrograman dan pelayaran.
 
 🎯 Cita-Cita:
@@ -204,7 +204,7 @@ Ketelitian dan kemampuan memecahkan masalah yang dibutuhkan dalam pemrograman da
 Sementara itu, pengalaman menjelajahi lautan dapat memberikan saya perspektif baru dan inspirasi dalam pengembangan perangkat lunak.
 
 Saya yakin bahwa dengan kerja keras dan dedikasi, saya dapat mencapai kedua impian saya.</p>`;
-      } else if (type === 'miyako') {
+      } else if (type === 'filosofi') {
         html = `<h2>Tsukiyuki Miyako</h2><p style="white-space:pre-wrap">Berikut adalah deskripsi tentang Bot WhatsApp Tsukiyuki Miyako:
 
 Tsukiyuki Miyako adalah bot WhatsApp yang multifungsi. Fitur-fitur:
@@ -223,13 +223,13 @@ Tsukiyuki Miyako adalah bot WhatsApp yang multifungsi. Fitur-fitur:
 7. Bantuan: .owner
 
 Ketik .sewa untuk info sewa bot.</p>`;
-      } else if (type === 'sewa') {
+      } else if (type === 'tutorial') {
         html = `<h2>Sewa Bot</h2>
           <img src="https://files.catbox.moe/nf3fx0.jpg" style="width:100%;margin:5px 0;">
           <img src="https://files.catbox.moe/nvzgew.jpg" style="width:100%;margin:5px 0;">
           <img src="https://files.catbox.moe/s7a8xw.jpg" style="width:100%;margin:5px 0;">
         `;
-      } else if (type === 'premium') {
+      } else if (type === 'moderator') {
         html = `<h2>Member Premium 30 Day</h2><p style="white-space:pre-wrap">1. *Akses Prioritas*: Mendapatkan prioritas dalam menggunakan bot, sehingga Anda tidak perlu menunggu lama untuk mendapatkan respons.
 2. *Fitur Eksklusif*: Mendapatkan akses ke fitur-fitur eksklusif yang tidak tersedia untuk pengguna biasa, seperti kemampuan untuk mengatur pengaturan bot yang lebih lanjut.
 3. *Batas Penggunaan yang Lebih Tinggi*: Mendapatkan batas penggunaan yang lebih tinggi, sehingga Anda dapat menggunakan bot lebih sering tanpa khawatir tentang batasan.
