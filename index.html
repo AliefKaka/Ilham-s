@@ -219,6 +219,164 @@
       transform: translateX(120%);
     }
 
+
+
+    .music-studio,
+    .chat-card {
+      display: grid;
+      gap: 14px;
+    }
+
+    .music-display {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(139, 92, 246, 0.18));
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .music-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .music-status {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    .visualizer {
+      display: flex;
+      align-items: flex-end;
+      gap: 5px;
+      height: 42px;
+    }
+
+    .visualizer span {
+      width: 6px;
+      min-height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--secondary), var(--primary));
+      animation: equalize 1s ease-in-out infinite;
+    }
+
+    .visualizer span:nth-child(2) { animation-delay: 0.12s; }
+    .visualizer span:nth-child(3) { animation-delay: 0.24s; }
+    .visualizer span:nth-child(4) { animation-delay: 0.36s; }
+    .visualizer span:nth-child(5) { animation-delay: 0.48s; }
+
+    @keyframes equalize {
+      0%, 100% { height: 12px; opacity: 0.62; }
+      50% { height: 40px; opacity: 1; }
+    }
+
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .volume-wrap {
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .volume-wrap label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--secondary);
+    }
+
+    .chat-window {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: 300px;
+      padding: 14px;
+      overflow-y: auto;
+      border-radius: var(--radius-md);
+      background: rgba(2, 6, 23, 0.42);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .message {
+      max-width: 86%;
+      padding: 12px 14px;
+      border-radius: 16px;
+      line-height: 1.6;
+      font-size: 0.94rem;
+    }
+
+    .message.bot {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.13);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(34, 211, 238, 0.72));
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+    }
+
+    .chat-form input {
+      width: 100%;
+      min-height: 54px;
+      padding: 0 16px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius-md);
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+    }
+
+    .chat-form input:focus {
+      border-color: rgba(34, 211, 238, 0.65);
+      box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12);
+    }
+
+    body.mode-neon {
+      --primary: #ec4899;
+      --secondary: #22d3ee;
+      --accent: #a3e635;
+    }
+
+    body.mode-calm {
+      --primary: #38bdf8;
+      --secondary: #2dd4bf;
+      --accent: #facc15;
+    }
+
+    body.mode-sunset {
+      --primary: #f97316;
+      --secondary: #fb7185;
+      --accent: #fef08a;
+    }
+
     .popup-backdrop {
       display: none;
       position: fixed;
@@ -332,8 +490,16 @@
       }
 
       .button-frame,
-      .toggle-frame {
+      .toggle-frame,
+      .control-grid,
+      .mode-grid,
+      .chat-form {
         grid-template-columns: 1fr;
+      }
+
+      .music-display {
+        align-items: flex-start;
+        flex-direction: column;
       }
 
       .panel {
@@ -380,6 +546,46 @@
         <button type="button" onclick="toggleBackground()">Ganti Background</button>
       </div>
     </section>
+
+    <section class="panel music-studio" aria-label="Studio musik dan mode tampilan">
+      <h2 class="section-title">Studio Futuristik</h2>
+      <div class="music-display">
+        <div>
+          <p class="music-title" id="song-title">Cyber Dream</p>
+          <p class="music-status" id="music-status">Musik siap diputar. Klik Unmute untuk mengaktifkan suara.</p>
+        </div>
+        <div class="visualizer" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="control-grid">
+        <button type="button" onclick="togglePlay()">▶️ Play/Pause</button>
+        <button type="button" onclick="toggleMute()" id="mute-button">🔊 Unmute Lagu</button>
+        <button type="button" onclick="toggleMusic()">⏭️ Lagu Berikutnya</button>
+      </div>
+      <div class="volume-wrap">
+        <label for="volume-control">Volume Musik</label>
+        <input id="volume-control" type="range" min="0" max="100" value="65" oninput="setVolume(this.value)">
+      </div>
+      <div class="mode-grid" aria-label="Pilihan mode warna">
+        <button type="button" onclick="setMode('default')">🌌 Default</button>
+        <button type="button" onclick="setMode('neon')">🧬 Neon</button>
+        <button type="button" onclick="setMode('calm')">🌊 Calm</button>
+        <button type="button" onclick="setMode('sunset')">🌅 Sunset</button>
+      </div>
+    </section>
+
+    <section class="panel chat-card" aria-label="Chat AI realtime">
+      <h2 class="section-title">Chat AI Realtime</h2>
+      <div class="chat-window" id="chat-window" aria-live="polite">
+        <div class="message bot">Halo! Aku Zixun AI. Tanyakan tentang coding, ide konten, musik, atau fitur website ini.</div>
+      </div>
+      <form class="chat-form" onsubmit="sendChat(event)">
+        <input id="chat-input" type="text" autocomplete="off" placeholder="Ketik pesan untuk AI...">
+        <button type="submit">Kirim</button>
+      </form>
+    </section>
+
   </main>
 
   <div class="popup-backdrop" id="popup-backdrop" onclick="closePopup()"></div>
@@ -387,7 +593,7 @@
     <span class="popup-close" onclick="closePopup()" role="button" tabindex="0" aria-label="Tutup popup">&times;</span>
     <div id="popup-content"></div>
   </div>
-  <audio id="music" src="https://files.catbox.moe/yzyfeo.mp3" autoplay loop></audio>
+  <audio id="music" src="https://files.catbox.moe/yzyfeo.mp3" autoplay loop muted></audio>
 
   <script>
     const dynamicBackgrounds = [
@@ -419,16 +625,103 @@
 
     let currentSong = 0;
     const songs = [
-      'https://files.catbox.moe/dfzn01.mp3',
-      'https://files.catbox.moe/82tj3s.mp3',
-      'https://files.catbox.moe/yzyfeo.mp3'
+      { title: 'Cyber Dream', src: 'https://files.catbox.moe/dfzn01.mp3' },
+      { title: 'Night Runner', src: 'https://files.catbox.moe/82tj3s.mp3' },
+      { title: 'Future Glow', src: 'https://files.catbox.moe/yzyfeo.mp3' }
     ];
+
+    function updateMusicInfo() {
+      const music = document.getElementById('music');
+      const status = document.getElementById('music-status');
+      document.getElementById('song-title').textContent = songs[currentSong].title;
+      document.getElementById('mute-button').textContent = music.muted ? '🔊 Unmute Lagu' : '🔇 Mute Lagu';
+      status.textContent = music.muted
+        ? 'Musik sedang muted. Klik Unmute untuk mengaktifkan suara.'
+        : `Now playing: ${songs[currentSong].title}`;
+    }
+
     function toggleMusic() {
       currentSong = (currentSong + 1) % songs.length;
       const music = document.getElementById('music');
-      music.src = songs[currentSong];
+      music.src = songs[currentSong].src;
       music.play();
+      updateMusicInfo();
     }
+
+    function togglePlay() {
+      const music = document.getElementById('music');
+      if (music.paused) {
+        music.play();
+      } else {
+        music.pause();
+      }
+      document.getElementById('music-status').textContent = music.paused ? 'Musik dijeda.' : `Now playing: ${songs[currentSong].title}`;
+    }
+
+    function toggleMute() {
+      const music = document.getElementById('music');
+      music.muted = !music.muted;
+      if (!music.muted) {
+        music.play();
+      }
+      updateMusicInfo();
+    }
+
+    function setVolume(value) {
+      const music = document.getElementById('music');
+      music.volume = Number(value) / 100;
+      if (music.volume > 0 && music.muted) {
+        music.muted = false;
+      }
+      updateMusicInfo();
+    }
+
+    function setMode(mode) {
+      document.body.classList.remove('mode-neon', 'mode-calm', 'mode-sunset');
+      if (mode !== 'default') {
+        document.body.classList.add(`mode-${mode}`);
+      }
+    }
+
+    function sendChat(event) {
+      event.preventDefault();
+      const input = document.getElementById('chat-input');
+      const message = input.value.trim();
+      if (!message) return;
+      addChatMessage(message, 'user');
+      input.value = '';
+      setTimeout(() => addChatMessage(createAiReply(message), 'bot'), 450);
+    }
+
+    function addChatMessage(text, sender) {
+      const chatWindow = document.getElementById('chat-window');
+      const bubble = document.createElement('div');
+      bubble.className = `message ${sender}`;
+      bubble.textContent = text;
+      chatWindow.appendChild(bubble);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function createAiReply(message) {
+      const text = message.toLowerCase();
+      if (text.includes('coding') || text.includes('program')) {
+        return 'Mulai dari HTML, CSS, dan JavaScript. Buat project kecil setiap hari agar skill naik cepat.';
+      }
+      if (text.includes('musik') || text.includes('lagu')) {
+        return 'Gunakan tombol Unmute, volume, dan Lagu Berikutnya untuk membuat suasana website lebih hidup.';
+      }
+      if (text.includes('mode') || text.includes('tema')) {
+        return 'Kamu bisa ganti suasana dengan mode Default, Neon, Calm, atau Sunset.';
+      }
+      return 'Ide bagus! Aku sarankan buat tampilannya simpel, cepat dibuka, responsif, dan punya interaksi yang terasa hidup.';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const music = document.getElementById('music');
+      music.volume = 0.65;
+      music.src = songs[currentSong].src;
+      updateMusicInfo();
+    });
 
     function showPopup(type) {
       const popup = document.getElementById('popup');
