@@ -1,144 +1,395 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zixun Official Website</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-dark: #090916;
+      --text: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.72);
+      --card: rgba(13, 17, 38, 0.66);
+      --primary: #8b5cf6;
+      --secondary: #22d3ee;
+      --accent: #f59e0b;
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: 'Poppins', sans-serif;
     }
+
     body {
+      min-height: 100vh;
+      background-color: var(--bg-dark);
       background-size: cover;
       background-position: center;
+      background-attachment: fixed;
+      color: var(--text);
       transition: background-image 1s ease-in-out;
       overflow-x: hidden;
     }
-    .overlay {
-      background: rgba(0,0,0,0.6);
+
+    body::before,
+    body::after {
+      content: '';
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: auto;
+      width: 360px;
+      height: 360px;
+      border-radius: 999px;
+      filter: blur(20px);
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    body::before {
+      top: -120px;
+      left: -90px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.65), transparent 68%);
+    }
+
+    body::after {
+      right: -110px;
+      bottom: 30px;
+      background: radial-gradient(circle, rgba(34, 211, 238, 0.48), transparent 70%);
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
       z-index: -1;
+      background:
+        linear-gradient(135deg, rgba(9, 9, 22, 0.88), rgba(21, 24, 53, 0.64)),
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.14), transparent 35%);
     }
-    header {
+
+    .page-shell {
+      width: min(1050px, calc(100% - 32px));
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 48px 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 22px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 42px 28px 34px;
       text-align: center;
-      padding: 2rem 1rem;
-      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
     }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      padding: 1px;
+      border-radius: inherit;
+      background: linear-gradient(120deg, rgba(139, 92, 246, 0.8), rgba(34, 211, 238, 0.65), rgba(245, 158, 11, 0.55));
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
     header img {
-      width: 100px;
-      border-radius: 100px;
-      margin-bottom: 1rem;
+      width: 118px;
+      height: 118px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 1.2rem;
+      border: 4px solid rgba(255, 255, 255, 0.55);
+      box-shadow: 0 18px 42px rgba(34, 211, 238, 0.25);
     }
+
     header h1 {
-      font-size: 2rem;
-      animation: blink 2s infinite;
+      font-size: clamp(2rem, 6vw, 4.2rem);
+      line-height: 1.08;
+      letter-spacing: -1px;
+      text-shadow: 0 12px 34px rgba(0, 0, 0, 0.42);
+    }
+
+    .hero-subtitle {
+      max-width: 650px;
+      margin: 16px auto 0;
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .badge {
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      font-size: 0.88rem;
+    }
+
+    .panel {
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(16px);
+    }
+
+    .section-title {
+      margin-bottom: 16px;
+      font-size: 0.86rem;
+      font-weight: 700;
       letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.76);
     }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
-    }
-    .button-frame, .toggle-frame {
-      margin: 1rem auto;
-      padding: 1rem;
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      border: 4px solid;
-      max-width: 600px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      animation: borderColorChange 6s infinite linear;
-    }
+
+    .button-frame,
     .toggle-frame {
-      grid-template-columns: 1fr;
-      max-width: 300px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
     }
-    @keyframes borderColorChange {
-      0%   { border-color: violet; }
-      25%  { border-color: gold; }
-      50%  { border-color: deepskyblue; }
-      75%  { border-color: orange; }
-      100% { border-color: violet; }
+
+    .toggle-frame {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
     button {
-      padding: 1rem;
-      border: none;
-      border-radius: 12px;
-      background-color: #222222aa;
+      position: relative;
+      min-height: 58px;
+      padding: 1rem 1.15rem;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0.07));
       color: white;
       cursor: pointer;
       font-size: 1rem;
-      transition: transform 0.2s ease;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 12px 28px rgba(0, 0, 0, 0.18);
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
     }
-    button:hover {
-      background-color: #444;
-      transform: scale(1.03);
+
+    button::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+      transform: translateX(-120%);
+      transition: transform 0.45s ease;
     }
+
+    button:hover,
+    button:focus-visible {
+      transform: translateY(-3px);
+      border-color: rgba(34, 211, 238, 0.55);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.32), rgba(34, 211, 238, 0.18));
+      outline: none;
+    }
+
+    button:hover::after,
+    button:focus-visible::after {
+      transform: translateX(120%);
+    }
+
+    .popup-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 998;
+      background: rgba(4, 7, 22, 0.62);
+      backdrop-filter: blur(10px);
+    }
+
+    .popup-backdrop.is-open {
+      display: block;
+    }
+
     .popup {
       display: none;
       position: fixed;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 2rem;
-      border-radius: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      max-height: 80vh;
+      width: min(92%, 680px);
+      max-height: 82vh;
+      padding: 32px;
       overflow-y: auto;
       z-index: 999;
-      width: 90%;
-      max-width: 600px;
+      transform: translate(-50%, -50%);
+      color: #111827;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 26px;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
     }
+
+    .popup.is-open {
+      display: block;
+      animation: popIn 0.22s ease-out;
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -46%) scale(0.96);
+      }
+
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    .popup h2 {
+      margin-bottom: 16px;
+      color: #111827;
+    }
+
+    .popup p {
+      color: #374151;
+      line-height: 1.75;
+    }
+
+    .popup img {
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14);
+    }
+
     .popup-close {
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      font-size: 20px;
+      position: sticky;
+      top: 0;
+      float: right;
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      margin: -14px -14px 8px 8px;
+      border-radius: 50%;
+      font-size: 24px;
       cursor: pointer;
+      background: #111827;
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.24);
     }
+
     #snow-canvas {
       position: fixed;
       top: 0;
       left: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
       z-index: 0;
+      opacity: 0.75;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-shell {
+        width: min(100% - 20px, 1050px);
+        padding: 20px 0;
+      }
+
+      .hero {
+        padding: 32px 18px 26px;
+      }
+
+      .button-frame,
+      .toggle-frame {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        padding: 14px;
+      }
     }
   </style>
 </head>
 <body>
   <canvas id="snow-canvas"></canvas>
   <div class="overlay"></div>
-  <header>
-    <img src="https://files.catbox.moe/445zpm.jpg" alt="Zixun Logo">
-    <h1>Welcome To Website Zixun</h1>
-  </header>  <div class="button-frame">
-    <button onclick="showPopup('story')">Story</button>
-    <button onclick="showPopup('filosofi')">Filosofi</button>
-    <button onclick="showPopup('tutorial')">Tutorial</button>
-    <button onclick="showPopup('moderator')">List Moderator</button>
-    <button onclick="window.open('https://www.instagram.com/zixunsss?igsh=M2g5NjNuOWR3YmRs', '_blank')">Instagram</button>
-    <button onclick="window.open('https://www.tiktok.com/@zixunn11?_r=1&_t=ZS-92vE48vAunM', '_blank')">TikTok</button>
-    <button onclick="window.open('https://files.catbox.moe/d8opwj.jpg', '_blank')">YouTube</button>
-    <button onclick="window.open('https://saweria.co/Zixun', '_blank')">Saweria</button>
-    <button onclick="window.open('https://whatsapp.com/channel/0029VbC1qKQCsU9NwspVAQ1B', '_blank')">Info Live</button>
-    <button onclick="showPopup('kontak')">Kontak</button>
-  </div>  <div class="toggle-frame">
-    <button onclick="toggleMusic()">Ganti Musik</button>
-    <button onclick="toggleBackground()">Ganti Background</button>
-  </div>  <div class="popup" id="popup">
-    <span class="popup-close" onclick="closePopup()">&times;</span>
+  <main class="page-shell">
+    <header class="hero">
+      <img src="https://files.catbox.moe/445zpm.jpg" alt="Zixun Logo">
+      <h1>Welcome To Website Zixun</h1>
+      <p class="hero-subtitle">Tempat singgah untuk mengenal Zixun, cerita perjalanan belajar coding, sosial media, dan informasi live terbaru dengan nuansa visual yang lebih modern.</p>
+      <div class="badge-row">
+        <span class="badge">✨ Programmer Journey</span>
+        <span class="badge">🎧 Music Mode</span>
+        <span class="badge">🌌 Dynamic Background</span>
+      </div>
+    </header>
+
+    <section class="panel" aria-label="Menu utama">
+      <h2 class="section-title">Menu Utama</h2>
+      <div class="button-frame">
+        <button type="button" onclick="showPopup('story')">Story</button>
+        <button type="button" onclick="showPopup('filosofi')">Filosofi</button>
+        <button type="button" onclick="showPopup('tutorial')">Tutorial</button>
+        <button type="button" onclick="showPopup('moderator')">List Moderator</button>
+        <button type="button" onclick="window.open('https://www.instagram.com/zixunsss?igsh=M2g5NjNuOWR3YmRs', '_blank')">Instagram</button>
+        <button type="button" onclick="window.open('https://www.tiktok.com/@zixunn11?_r=1&_t=ZS-92vE48vAunM', '_blank')">TikTok</button>
+        <button type="button" onclick="window.open('https://files.catbox.moe/d8opwj.jpg', '_blank')">YouTube</button>
+        <button type="button" onclick="window.open('https://saweria.co/Zixun', '_blank')">Saweria</button>
+        <button type="button" onclick="window.open('https://whatsapp.com/channel/0029VbC1qKQCsU9NwspVAQ1B', '_blank')">Info Live</button>
+        <button type="button" onclick="showPopup('kontak')">Kontak</button>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="Pengaturan tampilan dan musik">
+      <h2 class="section-title">Kontrol</h2>
+      <div class="toggle-frame">
+        <button type="button" onclick="toggleMusic()">Ganti Musik</button>
+        <button type="button" onclick="toggleBackground()">Ganti Background</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="popup-backdrop" id="popup-backdrop" onclick="closePopup()"></div>
+  <div class="popup" id="popup" role="dialog" aria-modal="true" aria-live="polite">
+    <span class="popup-close" onclick="closePopup()" role="button" tabindex="0" aria-label="Tutup popup">&times;</span>
     <div id="popup-content"></div>
   </div>
-  <audio id="music" src="https://files.catbox.moe/yzyfeo.mp3" autoplay loop></audio>  <script>
+  <audio id="music" src="https://files.catbox.moe/yzyfeo.mp3" autoplay loop></audio>
+
+  <script>
     const dynamicBackgrounds = [
       'https://files.catbox.moe/55blp3.jpeg',
       'https://files.catbox.moe/b57kpb.jpg',
@@ -181,6 +432,7 @@
 
     function showPopup(type) {
       const popup = document.getElementById('popup');
+      const backdrop = document.getElementById('popup-backdrop');
       const content = document.getElementById('popup-content');
       let html = '';
       if (type === 'story') {
@@ -221,12 +473,20 @@ Yuki Suou adalah siswi tahun pertama di Akademi Swasta Seirei yang terlihat tena
         html = `<h2>Kontak</h2><p>Hubungi saya via Instagram: <a href="https://ig.me/m/zixunsss">KLIK</a></p>`;
       }
       content.innerHTML = html;
-      popup.style.display = 'block';
+      popup.classList.add('is-open');
+      backdrop.classList.add('is-open');
     }
 
     function closePopup() {
-      document.getElementById('popup').style.display = 'none';
+      document.getElementById('popup').classList.remove('is-open');
+      document.getElementById('popup-backdrop').classList.remove('is-open');
     }
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closePopup();
+      }
+    });
 
     const canvas = document.getElementById('snow-canvas');
     const ctx = canvas.getContext('2d');
@@ -274,10 +534,21 @@ Yuki Suou adalah siswi tahun pertama di Akademi Swasta Seirei yang terlihat tena
       requestAnimationFrame(animateSnow);
     }
 
+    window.addEventListener('resize', () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      snowflakes = [];
+      createSnowflakes();
+    });
+
     createSnowflakes();
     animateSnow();
-  </script><script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script></body>
+  </script>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</body>
 </html>
