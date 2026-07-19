@@ -56,13 +56,13 @@
     body::before {
       top: -120px;
       left: -90px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.65), transparent 68%);
+      background: radial-gradient(circle, color-mix(in srgb, var(--primary) 68%, transparent), transparent 68%);
     }
 
     body::after {
       right: -110px;
       bottom: 30px;
-      background: radial-gradient(circle, rgba(34, 211, 238, 0.48), transparent 70%);
+      background: radial-gradient(circle, color-mix(in srgb, var(--secondary) 55%, transparent), transparent 70%);
     }
 
     .overlay {
@@ -377,6 +377,82 @@
       --accent: #fef08a;
     }
 
+
+
+    .mode-status {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .game-card {
+      display: grid;
+      gap: 14px;
+    }
+
+    .game-head {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .game-stat {
+      padding: 14px;
+      border-radius: var(--radius-md);
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .game-stat strong {
+      display: block;
+      font-size: 1.4rem;
+      color: var(--accent);
+    }
+
+    .game-arena {
+      position: relative;
+      min-height: 320px;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.18), rgba(2, 6, 23, 0.76));
+      background-size: 28px 28px, 28px 28px, cover;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: inset 0 0 42px rgba(34, 211, 238, 0.12);
+    }
+
+    .game-orb {
+      position: absolute;
+      width: 54px;
+      height: 54px;
+      display: none;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff, var(--accent) 32%, var(--primary) 72%);
+      box-shadow: 0 0 18px var(--accent), 0 0 42px var(--primary);
+      transform: translate(-50%, -50%);
+      animation: orbPulse 0.8s ease-in-out infinite alternate;
+    }
+
+    .game-orb.is-active {
+      display: grid;
+    }
+
+    @keyframes orbPulse {
+      from { scale: 0.92; }
+      to { scale: 1.08; }
+    }
+
+    .game-note {
+      color: var(--text-muted);
+      line-height: 1.7;
+      text-align: center;
+    }
+
     .popup-backdrop {
       display: none;
       position: fixed;
@@ -493,6 +569,7 @@
       .toggle-frame,
       .control-grid,
       .mode-grid,
+      .game-head,
       .chat-form {
         grid-template-columns: 1fr;
       }
@@ -572,6 +649,26 @@
         <button type="button" onclick="setMode('neon')">🧬 Neon</button>
         <button type="button" onclick="setMode('calm')">🌊 Calm</button>
         <button type="button" onclick="setMode('sunset')">🌅 Sunset</button>
+      </div>
+      <p class="mode-status" id="mode-status">Mode aktif: Default</p>
+    </section>
+
+
+    <section class="panel game-card" aria-label="Mini game neon catch">
+      <h2 class="section-title">Mini Game: Neon Catch</h2>
+      <p class="game-note">Tangkap orb neon sebanyak mungkin dalam 20 detik. Orb akan berpindah posisi setiap kali kamu klik.</p>
+      <div class="game-head">
+        <div class="game-stat">Skor<strong id="game-score">0</strong></div>
+        <div class="game-stat">Waktu<strong id="game-time">20</strong></div>
+        <div class="game-stat">Best<strong id="game-best">0</strong></div>
+      </div>
+      <div class="game-arena" id="game-arena">
+        <button type="button" class="game-orb" id="game-orb" onclick="catchOrb()" aria-label="Tangkap orb neon">⚡</button>
+      </div>
+      <div class="control-grid">
+        <button type="button" onclick="startGame()">🎮 Mulai Game</button>
+        <button type="button" onclick="resetGame()">🔄 Reset</button>
+        <button type="button" onclick="showGameHint()">💡 Tips</button>
       </div>
     </section>
 
@@ -677,10 +774,80 @@
     }
 
     function setMode(mode) {
+      const modeNames = {
+        default: 'Default',
+        neon: 'Neon Cyberpunk',
+        calm: 'Calm Ocean',
+        sunset: 'Sunset Glow'
+      };
       document.body.classList.remove('mode-neon', 'mode-calm', 'mode-sunset');
       if (mode !== 'default') {
         document.body.classList.add(`mode-${mode}`);
       }
+      document.getElementById('mode-status').textContent = `Mode aktif: ${modeNames[mode] || modeNames.default}`;
+      localStorage.setItem('zixun-mode', mode);
+    }
+
+    let gameScore = 0;
+    let gameTime = 20;
+    let gameTimer = null;
+    let gameActive = false;
+
+    function startGame() {
+      resetGame(false);
+      gameActive = true;
+      document.getElementById('game-orb').classList.add('is-active');
+      moveOrb();
+      gameTimer = setInterval(() => {
+        gameTime -= 1;
+        document.getElementById('game-time').textContent = gameTime;
+        if (gameTime <= 0) {
+          finishGame();
+        }
+      }, 1000);
+    }
+
+    function resetGame(hideOrb = true) {
+      clearInterval(gameTimer);
+      gameScore = 0;
+      gameTime = 20;
+      gameActive = false;
+      document.getElementById('game-score').textContent = gameScore;
+      document.getElementById('game-time').textContent = gameTime;
+      if (hideOrb) {
+        document.getElementById('game-orb').classList.remove('is-active');
+      }
+    }
+
+    function catchOrb() {
+      if (!gameActive) return;
+      gameScore += 1;
+      document.getElementById('game-score').textContent = gameScore;
+      moveOrb();
+    }
+
+    function moveOrb() {
+      const arena = document.getElementById('game-arena');
+      const orb = document.getElementById('game-orb');
+      const padding = 42;
+      const x = Math.random() * (arena.clientWidth - padding * 2) + padding;
+      const y = Math.random() * (arena.clientHeight - padding * 2) + padding;
+      orb.style.left = `${x}px`;
+      orb.style.top = `${y}px`;
+    }
+
+    function finishGame() {
+      clearInterval(gameTimer);
+      gameActive = false;
+      document.getElementById('game-orb').classList.remove('is-active');
+      const best = Math.max(Number(localStorage.getItem('zixun-best-score') || 0), gameScore);
+      localStorage.setItem('zixun-best-score', best);
+      document.getElementById('game-best').textContent = best;
+      addChatMessage(`Game selesai! Skor kamu ${gameScore}. Best score: ${best}.`, 'bot');
+    }
+
+    function showGameHint() {
+      addChatMessage('Tips Neon Catch: fokus di tengah arena, klik orb secepat mungkin, dan gunakan mode Neon agar orb terlihat lebih kontras.', 'bot');
     }
 
     function sendChat(event) {
@@ -690,7 +857,11 @@
       if (!message) return;
       addChatMessage(message, 'user');
       input.value = '';
-      setTimeout(() => addChatMessage(createAiReply(message), 'bot'), 450);
+      addTypingBubble();
+      setTimeout(() => {
+        removeTypingBubble();
+        addChatMessage(createAiReply(message), 'bot');
+      }, 520);
     }
 
     function addChatMessage(text, sender) {
@@ -702,18 +873,48 @@
       chatWindow.scrollTop = chatWindow.scrollHeight;
     }
 
+    function addTypingBubble() {
+      const chatWindow = document.getElementById('chat-window');
+      const bubble = document.createElement('div');
+      bubble.id = 'typing-bubble';
+      bubble.className = 'message bot';
+      bubble.textContent = 'Zixun AI sedang mengetik...';
+      chatWindow.appendChild(bubble);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function removeTypingBubble() {
+      const bubble = document.getElementById('typing-bubble');
+      if (bubble) bubble.remove();
+    }
+
     function createAiReply(message) {
       const text = message.toLowerCase();
-      if (text.includes('coding') || text.includes('program')) {
-        return 'Mulai dari HTML, CSS, dan JavaScript. Buat project kecil setiap hari agar skill naik cepat.';
+      if (text.includes('siapa') && text.includes('kamu')) {
+        return 'Aku Zixun AI, asisten chat di website ini. Aku bisa bantu ide coding, desain website, musik, mode tampilan, dan tips minigame.';
       }
-      if (text.includes('musik') || text.includes('lagu')) {
-        return 'Gunakan tombol Unmute, volume, dan Lagu Berikutnya untuk membuat suasana website lebih hidup.';
+      if (text.includes('html') || text.includes('css') || text.includes('javascript') || text.includes('coding') || text.includes('program')) {
+        return 'Untuk belajar coding, mulai dari HTML untuk struktur, CSS untuk tampilan, lalu JavaScript untuk interaksi. Buat target kecil seperti tombol interaktif, popup, playlist musik, lalu gabungkan jadi project portfolio.';
       }
-      if (text.includes('mode') || text.includes('tema')) {
-        return 'Kamu bisa ganti suasana dengan mode Default, Neon, Calm, atau Sunset.';
+      if (text.includes('bug') || text.includes('error') || text.includes('kenapa')) {
+        return 'Coba cek 3 hal: console browser untuk error JavaScript, nama id/class harus sama dengan yang dipanggil script, dan pastikan event seperti onclick atau submit sudah terhubung ke function yang benar.';
       }
-      return 'Ide bagus! Aku sarankan buat tampilannya simpel, cepat dibuka, responsif, dan punya interaksi yang terasa hidup.';
+      if (text.includes('musik') || text.includes('lagu') || text.includes('unmute') || text.includes('volume')) {
+        return 'Fitur musik sekarang punya Play/Pause, Unmute/Mute, Next Track, dan Volume. Karena browser sering memblokir autoplay bersuara, klik Unmute atau Play dulu agar lagu aktif.';
+      }
+      if (text.includes('mode') || text.includes('tema') || text.includes('warna')) {
+        return 'Mode tampilan sudah bisa diganti ke Default, Neon, Calm, atau Sunset. Pilihanmu disimpan di browser, jadi saat halaman dibuka lagi mode terakhir tetap dipakai.';
+      }
+      if (text.includes('game') || text.includes('minigame') || text.includes('skor')) {
+        return 'Mini game Neon Catch: klik Mulai Game, tangkap orb neon selama 20 detik, lalu kejar best score. Di layar kecil arena tetap responsif.';
+      }
+      if (text.includes('desain') || text.includes('tampilan') || text.includes('website')) {
+        return 'Agar website terlihat profesional: gunakan hierarki visual yang jelas, warna konsisten, jarak antar elemen lega, tombol mudah diklik, dan animasi secukupnya agar tetap cepat.';
+      }
+      if (text.includes('halo') || text.includes('hai') || text.includes('hello')) {
+        return 'Halo! Mau bahas coding, desain website, musik, mode tampilan, atau coba minigame Neon Catch?';
+      }
+      return `Aku paham pertanyaanmu: "${message}". Jawaban singkatku: pecah masalahnya jadi langkah kecil, tentukan tujuan, lalu uji hasilnya langsung di browser. Kalau mau, tanyakan lebih spesifik tentang coding, desain, musik, mode, atau game.`;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -721,6 +922,8 @@
       music.volume = 0.65;
       music.src = songs[currentSong].src;
       updateMusicInfo();
+      setMode(localStorage.getItem('zixun-mode') || 'default');
+      document.getElementById('game-best').textContent = localStorage.getItem('zixun-best-score') || 0;
     });
 
     function showPopup(type) {
